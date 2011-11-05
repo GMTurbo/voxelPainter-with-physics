@@ -52,7 +52,8 @@
 			var i, intersector;
 
 			var gui, voxelConfig = {
-				orthographicProjection: false
+				orthographicProjection: false,
+				gravityScale: 1
 			};
 			
 			var system = jigLib.PhysicsSystem.getInstance();
@@ -157,6 +158,12 @@
 				
 				});
 				
+				gui.add(voxelConfig, 'gravityScale', 0.1, 1, 0.1).onChange(function(){
+					system.setGravity([0,-9.8*voxelConfig.gravityScale,0,0]);//-120
+				});
+				
+				//gui.add(this, 'explode').name('Explode!'); // Specify a custom name.
+				
 				//add physics
 				system.setGravity([0,-9.0,0,0]);//-120
 				system.setSolverType('ACCUMULATED');//FAST, NORMAL, ACCUMULATED
@@ -165,6 +172,9 @@
 				ground.set_friction(10);
 				system.addBody(ground);
 				ground.moveTo([0,0,0,0]);
+				
+				//var explosion = new jigLib.Explosion([0,0,0,0], 6, 500, cube);
+				//system.addEffect(explosion);
 				
 			}
 
@@ -251,6 +261,9 @@
 						voxelP.moveTo([voxelPosition.x, voxelPosition.y, voxelPosition.z, 0]);
 						voxelP.set_movable(true);
 						system.addBody(voxelP);
+						//var explosion = new jigLib.Explosion([0,0,0,0], 6, 500, voxelP);
+						//system.addEffect(explosion);
+						//link them
 						data = { THREE: voxel, JIGLIB: voxelP};
 						links.push(data);
 
@@ -340,6 +353,9 @@
 				renderer.render( scene, camera );
 
 			}
+			
+			//jigLibjs Functions
+			
 			function JL2THREE(target, pos, dir) {
 				var position = new THREE.Matrix4();
 				position.setTranslation(pos[0], pos[1], pos[2])
@@ -348,6 +364,7 @@
 				target.matrix = position;
 				target.update(false, true, camera);
 			}
+			
 			function lookUp(three){
 				for(var i in links){
 					if(links[i].THREE === three){
@@ -355,6 +372,10 @@
 					}
 				}
 				return null;
+			}
+			
+			function explode(){
+				explosion.explode();
 			}
 		</script>
 
