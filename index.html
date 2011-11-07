@@ -92,8 +92,13 @@
 				// cubes
 
 				cubeGeo = new THREE.CubeGeometry( 50, 50, 50 );
-				cubeMaterial = new THREE.MeshLambertMaterial( { color: 0x00ff80, shading: THREE.FlatShading} );
-				cubeMaterial.color.setHSV( 0.1, 0.7, 1.0 );
+				cubeMaterial = function() { 
+					var tmp = new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff, shading: THREE.FlatShading} ); 
+					//tmp.color.setHSV( 0.1, 0.7, 1.0 ); 
+					return tmp;
+				};
+				//cubeMaterial = 
+				
 
 				// picking
 
@@ -165,7 +170,7 @@
 				//gui.add(this, 'explode').name('Explode!'); // Specify a custom name.
 				
 				//add physics
-				system.setGravity([0,-9.0,0,0]);//-120
+				system.setGravity([0,-9.8,0,0]);//-120
 				system.setSolverType('ACCUMULATED');//FAST, NORMAL, ACCUMULATED
 				
 				var ground = new jigLib.JPlane(null,[0, 1, 0, 0]);
@@ -177,7 +182,7 @@
 				//system.addEffect(explosion);
 				
 			}
-
+			
 			function getRealIntersector( intersects ) {
 
 				for( i = 0; i < intersects.length; i++ ) {
@@ -249,7 +254,7 @@
 						intersector = getRealIntersector( intersects );
 						setVoxelPosition( intersector );
 
-						var voxel = new THREE.Mesh( cubeGeo, cubeMaterial );
+						var voxel = new THREE.Mesh( cubeGeo, cubeMaterial() );
 						voxel.position.copy( voxelPosition );
 						voxel.matrixAutoUpdate = false;
 						voxel.updateMatrix();
@@ -257,7 +262,8 @@
 						
 						var voxelP = new jigLib.JBox(null, 50, 50, 50);
 						voxelP.set_mass(5);
-						voxelP.set_friction(15);
+						voxelP.set_friction(25);
+						voxelP.set_restitution(0);
 						voxelP.moveTo([voxelPosition.x, voxelPosition.y, voxelPosition.z, 0]);
 						voxelP.set_movable(true);
 						system.addBody(voxelP);
@@ -314,7 +320,7 @@
 			function render() {
 				
 				now = new Date().getTime();
-				if(usePhysics) system.integrate((now - then) / 70);//400
+				if(usePhysics) system.integrate((now - then) / 200);//400
 				then = now;
 				
 				
