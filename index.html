@@ -46,6 +46,7 @@
 			var mouse2D, mouse3D, ray,
 			rollOveredFace, isShiftDown = false,
 			theta = 45, isCtrlDown = false;
+			var timeScale = 1;
 
 			var rollOverMesh, rollOverMaterial, voxelPosition = new THREE.Vector3(), tmpVec = new THREE.Vector3();
 			var cubeGeo, cubeMaterial;
@@ -53,7 +54,8 @@
 
 			var gui, voxelConfig = {
 				orthographicProjection: false,
-				gravityScale: 1
+				gravityScale: 1,
+				timeScale: 1
 			};
 			
 			var system = jigLib.PhysicsSystem.getInstance();
@@ -166,6 +168,11 @@
 				gui.add(voxelConfig, 'gravityScale', 0.1, 1, 0.1).onChange(function(){
 					system.setGravity([0,-9.8*voxelConfig.gravityScale,0,0]);//-120
 				});
+				
+				gui.add(voxelConfig, 'timeScale', 0.1, 1, 0.1).onChange(function(){
+					timeScale = voxelConfig.timeScale;//-120
+				});
+				//
 				
 				//gui.add(this, 'explode').name('Explode!'); // Specify a custom name.
 				
@@ -320,7 +327,7 @@
 			function render() {
 				
 				now = new Date().getTime();
-				if(usePhysics) system.integrate((now - then) / 200);//400
+				if(usePhysics) system.integrate((now - then) / 200*timeScale);//400
 				then = now;
 				
 				
