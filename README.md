@@ -3,4 +3,4 @@ This is an extension of mr. doob's Voxel Painter example (http://mrdoob.github.c
 It's a fun one.
 
 if you're ok loading "unsafe scripts", you can try it out [here](
-http://htmlpreview.github.io/?https://github.com/GMTurbo/voxelPainter-with-physics/blob/master/index.html
+http://htmlpreview.github.io/?https://github.com/GMTurbo/voxelPainter-with-physics/blob/master/index.html)
